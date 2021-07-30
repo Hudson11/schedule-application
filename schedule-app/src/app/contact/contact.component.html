@@ -1,0 +1,98 @@
+<mat-toolbar color="primary" class="toolbar"> 
+  <mat-icon> account_circle </mat-icon>
+  <span> Contacts </span>
+</mat-toolbar>
+
+<mat-tab-group>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon> list </mat-icon>
+      Contact List
+    </ng-template>
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="contacts" class="mat-elevation-z8">
+        <ng-container  matColumnDef="image">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element">
+            <input *ngIf="!element.image" type="file" name="image" (change)="uploadImage($event, element)">
+            <img *ngIf="element.image" src="data:image/png;base64,{{ element.image }}" alt="perfil do usuario" width="50" height="50">
+          </td>
+        </ng-container>
+  
+        <ng-container  matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> ID </th>
+          <td mat-cell *matCellDef="let element"> {{ element.id }}</td>
+        </ng-container>
+      
+        <ng-container  matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Name </th>
+          <td mat-cell *matCellDef="let element"> {{ element.name }}</td>
+        </ng-container>
+      
+        <ng-container  matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef> Email </th>
+          <td mat-cell *matCellDef="let element"> {{ element.email }}</td>
+        </ng-container>
+  
+        <ng-container matColumnDef="favorite">
+          <th mat-header-cell *matHeaderCellDef> </th>
+          <td mat-cell *matCellDef="let element"> 
+            <button mat-icon-button (click)="setContactFavorite(element)">
+              <mat-icon> {{ element.favorite ? 'favorite' : 'favorite_border' }}  </mat-icon>
+            </button> 
+          </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="View">
+          <th mat-header-cell *matHeaderCellDef> </th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button (click)="viewContact(element)"> <mat-icon> account_circle </mat-icon> </button>
+          </td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayColumns;"></tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </div>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon> face </mat-icon>
+      Contact Form
+    </ng-template>
+    <mat-card>
+      <mat-card-title>
+        Create a new Contact
+      </mat-card-title>
+      <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="form-container">
+            <mat-form-field class="full-width">
+              <mat-label> Name </mat-label>
+              <input id="name-field" formControlName="name" matInput name="name" type="text" placeholder="Contact Name">
+              <mat-error *ngIf="form.controls.name.errors && form.controls.name.errors.required">
+                Name is <strong> required </strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        
+          <div class="form-container">
+            <mat-form-field class="full-width">
+              <mat-label> Email </mat-label>
+              <input id="email-field" formControlName="email" matInput name="email" type="email" placeholder="Contact Email">
+              <mat-error *ngIf="form.controls.email.errors && form.controls.email.errors.required">
+                Email is <strong> required </strong>
+              </mat-error>
+              <mat-error *ngIf="form.controls.email.errors && form.controls.email.errors.email">
+                Email is not <strong> valid </strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        
+          <button id="button-submit" [disabled]="!form.valid" mat-raised-button color="primary" type="submit"> Create </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
+</mat-tab-group>

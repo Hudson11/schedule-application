@@ -1,0 +1,15 @@
+.full-width {
+  width: 100%;
+}
+
+table {
+  width: 100%;
+}
+
+.form-container {
+  margin: 1rem auto;
+}
+
+.toolbar span {
+  margin-left: 1rem;
+}
